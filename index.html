@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adobe Express with BrandGuard AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Adobe Express Header Simulation -->
+        <header class="express-header">
+            <div class="header-left">
+                <div class="adobe-logo">Adobe Express</div>
+                <div class="project-name">Untitled Design</div>
+            </div>
+            <div class="header-center">
+                <div class="canvas-controls">
+                    <button class="control-btn" id="undoBtn">↶</button>
+                    <button class="control-btn" id="redoBtn">↷</button>
+                    <div class="zoom-controls">
+                        <button class="control-btn" id="zoomOutBtn">−</button>
+                        <span class="zoom-level">100%</span>
+                        <button class="control-btn" id="zoomInBtn">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn-primary">Share</button>
+                <button class="btn-secondary">Download</button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="workspace">
+            <!-- Left Toolbar -->
+            <div class="left-toolbar">
+                <div class="tool-group">
+                    <button class="tool-btn active" data-tool="select" title="Select">
+                        <span class="tool-icon">↖</span>
+                    </button>
+                    <button class="tool-btn" data-tool="text" title="Text">
+                        <span class="tool-icon">T</span>
+                    </button>
+                    <button class="tool-btn" data-tool="shapes" title="Shapes">
+                        <span class="tool-icon">◯</span>
+                    </button>
+                    <button class="tool-btn" data-tool="images" title="Images">
+                        <span class="tool-icon">🖼</span>
+                    </button>
+                </div>
+                <div class="tool-group">
+                    <button class="tool-btn brandguard-toggle active" data-tool="brandguard" title="BrandGuard AI">
+                        <span class="tool-icon">🛡️</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Canvas Area -->
+            <div class="canvas-workspace">
+                <div class="canvas-container">
+                    <div class="canvas-background">
+                        <canvas id="designCanvas" width="800" height="600"></canvas>
+                        <div class="canvas-overlay" id="canvasOverlay">
+                            <!-- Design elements will be positioned here -->
+                            <div class="design-element text-element" data-id="text-1" data-type="text" 
+                                 style="left: 100px; top: 80px; color: #FF0000; font-family: Arial; font-size: 32px; font-weight: bold;">
+                                Sample Headline
+                            </div>
+                            <div class="design-element shape-element" data-id="shape-1" data-type="shape" 
+                                 style="left: 100px; top: 150px; width: 300px; height: 100px; background-color: #00FF00; border-radius: 8px;">
+                            </div>
+                            <div class="design-element text-element" data-id="text-2" data-type="text" 
+                                 style="left: 100px; top: 280px; color: #0000FF; font-family: Times New Roman; font-size: 16px;">
+                                Body text with potential contrast issues
+                            </div>
+                            <div class="design-element image-element" data-id="image-1" data-type="image" 
+                                 style="left: 450px; top: 100px; width: 200px; height: 150px; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                📷 Image
+                            </div>
+                        </div>
+                    </div>
+                    <div class="canvas-rulers">
+                        <div class="ruler-horizontal"></div>
+                        <div class="ruler-vertical"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BrandGuard AI Panel -->
+            <div class="brandguard-panel" id="brandguardPanel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="panel-icon">🛡️</span>
+                        <h2>BrandGuard AI</h2>
+                    </div>
+                    <div class="panel-user">
+                        <span id="userStatus">Not connected</span>
+                        <button id="connectBtn" class="btn-connect">Connect</button>
+                    </div>
+                </div>
+
+                <!-- Panel Tabs -->
+                <div class="panel-tabs">
+                    <button class="panel-tab active" data-tab="dashboard">
+                        <span class="tab-icon">📊</span>
+                        Dashboard
+                    </button>
+                    <button class="panel-tab" data-tab="assets">
+                        <span class="tab-icon">📁</span>
+                        Assets
+                    </button>
+                    <button class="panel-tab" data-tab="tone">
+                        <span class="tab-icon">💬</span>
+                        Tone
+                    </button>
+                    <button class="panel-tab" data-tab="about">
+                        <span class="tab-icon">ℹ️</span>
+                        About
+                    </button>
+                </div>
+
+                <!-- Panel Content -->
+                <div class="panel-content">
+                    <!-- Dashboard Tab -->
+                    <div id="dashboard" class="tab-panel active">
+                        <div class="compliance-overview">
+                            <div class="score-display">
+                                <div class="score-circle" id="scoreCircle">
+                                    <div class="score-value" id="scoreValue">--</div>
+                                    <div class="score-label">Score</div>
+                                </div>
+                                <div class="score-info">
+                                    <div class="score-status" id="scoreStatus">Ready to scan</div>
+                                    <div class="last-scan" id="lastScan">Click scan to analyze</div>
+                                </div>
+                            </div>
+                            
+                            <div class="scan-section">
+                                <button id="scanBtn" class="btn-scan">
+                                    <span class="btn-icon">🔍</span>
+                                    Scan Design
+                                </button>
+                                <button id="fixAllLegalBtn" class="btn-fix-all" style="display: none;">
+                                  <span class="btn-icon">⚖️</span>
+                                  Add All Legal Text
+                                </button>
+                                <label class="continuous-toggle">
+                                    <input type="checkbox" id="continuousMode">
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-text">Auto-scan</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="loading-state hidden" id="loadingState">
+                            <div class="spinner"></div>
+                            <span>Analyzing design...</span>
+                        </div>
+
+                        <div class="issues-list" id="issuesList">
+                            <div class="issue-category" data-category="brand">
+                                <div class="category-header">
+                                    <span class="category-icon">🎨</span>
+                                    <span class="category-name">Brand</span>
+                                    <span class="issue-count" id="brandCount">0</span>
+                                    <button class="expand-toggle">▼</button>
+                                </div>
+                                <div class="category-issues" id="brandIssues"></div>
+                            </div>
+
+                            <div class="issue-category" data-category="accessibility">
+                                <div class="category-header">
+                                    <span class="category-icon">♿</span>
+                                    <span class="category-name">Accessibility</span>
+                                    <span class="issue-count" id="accessibilityCount">0</span>
+                                    <button class="expand-toggle">▼</button>
+                                </div>
+                                <div class="category-issues" id="accessibilityIssues"></div>
+                            </div>
+
+                            <div class="issue-category" data-category="legal">
+                                <div class="category-header">
+                                    <span class="category-icon">⚖️</span>
+                                    <span class="category-name">Legal</span>
+                                    <span class="issue-count" id="legalCount">0</span>
+                                    <button class="expand-toggle">▼</button>
+                                </div>
+                                <div class="category-issues" id="legalIssues"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assets Tab -->
+                    <div id="assets" class="tab-panel">
+                        <div class="assets-header">
+                            <div class="search-box">
+                                <input type="text" id="assetSearch" placeholder="Search assets..." class="search-input">
+                            </div>
+                            <div class="asset-filters">
+                                <button class="filter-btn active" data-filter="all">All</button>
+                                <button class="filter-btn" data-filter="logos">Logos</button>
+                                <button class="filter-btn" data-filter="icons">Icons</button>
+                                <button class="filter-btn" data-filter="images">Images</button>
+                            </div>
+                        </div>
+                        <div class="assets-grid" id="assetsGrid">
+                            <!-- Assets populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Tone Tab -->
+                    <div id="tone" class="tab-panel">
+                        <div class="tone-section">
+                            <div class="tone-input">
+                                <label for="toneTextarea">Marketing Copy</label>
+                                <textarea id="toneTextarea" placeholder="Paste your marketing copy here for tone analysis..." rows="6"></textarea>
+                                <button id="analyzeToneBtn" class="btn-analyze">Analyze Tone</button>
+                            </div>
+                            <div class="tone-results" id="toneResults">
+                                <div class="tone-placeholder">
+                                    <div class="placeholder-icon">💬</div>
+                                    <p>Enter marketing copy above to analyze tone compliance</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Tab -->
+                    <div id="about" class="tab-panel">
+                        <div class="about-section">
+                            <h3>BrandGuard AI</h3>
+                            <p class="about-description">
+                                AI-powered brand compliance for Adobe Express. Real-time analysis of colors, fonts, accessibility, and legal requirements.
+                            </p>
+                            
+                            <div class="feature-list">
+                                <div class="feature-item">
+                                    <span class="feature-icon">🎨</span>
+                                    <div class="feature-text">
+                                        <strong>Brand Compliance</strong>
+                                        <p>Color palette and font validation</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">♿</span>
+                                    <div class="feature-text">
+                                        <strong>Accessibility</strong>
+                                        <p>WCAG 2.2 AA compliance checking</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">⚖️</span>
+                                    <div class="feature-text">
+                                        <strong>Legal & Regulatory</strong>
+                                        <p>Required disclaimers and notices</p>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🤖</span>
+                                    <div class="feature-text">
+                                        <strong>AI Tone Analysis</strong>
+                                        <p>Brand voice compliance with BrandGPT</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="demo-instructions">
+                                <h4>Quick Start:</h4>
+                                <ol>
+                                    <li>Click "Connect" to authenticate</li>
+                                    <li>Select your organization and brand profile</li>
+                                    <li>Click "Scan Design" to analyze compliance</li>
+                                    <li>Use "Locate" and "Fix" for issues</li>
+                                    <li>Enable "Auto-scan" for continuous monitoring</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication Modal -->
+        <div id="authModal" class="modal hidden">
+            <div class="modal-backdrop"></div>
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    <h3>Connect to BrandGuard AI</h3>
+                    <button class="modal-close" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="auth-form">
+                        <div class="form-group">
+                            <label for="orgSelect">Organization</label>
+                            <select id="orgSelect" class="form-select">
+                                <option value="">Choose organization...</option>
+                                <option value="acme-corp">ACME Corporation</option>
+                                <option value="tech-innovations">Tech Innovations Inc</option>
+                                <option value="global-finance">Global Finance Group</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileSelect">Brand Profile</label>
+                            <select id="profileSelect" class="form-select" disabled>
+                                <option value="">Select organization first...</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button id="connectButton" class="btn-primary" disabled>Connect</button>
+                            <button id="resetButton" class="btn-secondary">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
